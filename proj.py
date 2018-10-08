@@ -34,5 +34,6 @@ if __name__ == "__main__":
 	# sort list by time descending
 	xattrs.sort(key=lambda x:x['create_time'], reverse=True)
 
-	print xattrs
+	for x in xattrs:
+		print x
 
