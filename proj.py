@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import json
 import xattr
 from pathlib import Path
 	
@@ -34,6 +35,5 @@ if __name__ == "__main__":
 	# sort list by time descending
 	xattrs.sort(key=lambda x:x['create_time'], reverse=True)
 
-	for x in xattrs:
-		print x
+	print(json.dumps(xattrs, indent=4))
 
