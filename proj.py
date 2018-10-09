@@ -4,16 +4,18 @@ import time
 import xattr
 from pathlib import Path
 
-def printxattrs(xattrs):
+# def printxattrs(xattrs):
 
-	for f in xattrs:
-		print "="*100
-		print "\nFile path: " + f['file_path']
-		for x in f['extended_attributes']:
-			print "\t" + x.keys()[0] + " : " + x[x.keys()[0]]
+# 	for f in xattrs:
+# 		print "="*100
+# 		print "\nFile path: " + f['file_path']
+# 		for x in f['extended_attributes']:
+# 			print "\t" + x.keys()[0] + " : " + x[x.keys()[0]]
 
 def genReport(xattrs, path):
 
+	#TODO Make this write out to a file
+	
 	print "## Extended Attributes Report for " + str(path) + "\n"
 	for f in xattrs:
 
@@ -57,5 +59,4 @@ if __name__ == "__main__":
 	xattrs.sort(key=lambda x:x['create_time'], reverse=True)
 
 	# print nicely
-	# printxattrs(xattrs)
 	genReport(xattrs, path)
