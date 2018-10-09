@@ -3,7 +3,29 @@ import sys
 import time
 import xattr
 from pathlib import Path
-	
+
+def printxattrs(xattrs):
+
+	for f in xattrs:
+		print "="*100
+		print "\nFile path: " + f['file_path']
+		for x in f['extended_attributes']:
+			print "\t" + x.keys()[0] + " : " + x[x.keys()[0]]
+
+def genReport(xattrs, path):
+
+	print "## Extended Attributes Report for " + str(path) + "\n"
+	for f in xattrs:
+
+		print "#### File Path:\n"
+		print f['file_path'] + "\n"
+
+		print "#### Extended Attributes:"
+		for x in f['extended_attributes']:
+			print "- **" + x.keys()[0] + ":**\n"
+			print "\t" + x[x.keys()[0]] + "\n"
+
+		print "\n---\n"
 
 if __name__ == "__main__":
 
@@ -20,20 +42,20 @@ if __name__ == "__main__":
 	xattrs = []
 	for p in files:
 		file_xattrs = {}
-		
+
 		file_xattrs['file_path'] = str(p)
 		file_xattrs['create_time'] = time.ctime(os.path.getctime(str(p)))
 		file_xattrs['extended_attributes'] = []
-	
+
 		x = xattr.listxattr(str(p))
 		for attr_name in x:
 			file_xattrs['extended_attributes'].append({str(attr_name):xattr.getxattr(str(p), str(attr_name))})
-		
+
 		xattrs.append(file_xattrs)
 
 	# sort list by time descending
 	xattrs.sort(key=lambda x:x['create_time'], reverse=True)
 
-	for x in xattrs:
-		print x
-
+	# print nicely
+	# printxattrs(xattrs)
+	genReport(xattrs, path)
