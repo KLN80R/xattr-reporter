@@ -5,6 +5,22 @@ import json
 import xattr
 from pathlib import Path
 	
+def genReport(xattrs, path):
+
+	#TODO Make this write out to a file
+	
+	print "## Extended Attributes Report for " + str(path) + "\n"
+	for f in xattrs:
+
+		print "#### File Path:\n"
+		print f['file_path'] + "\n"
+
+		print "#### Extended Attributes:"
+		for x in f['extended_attributes']:
+			print "- **" + x.keys()[0] + ":**\n"
+			print "\t" + x[x.keys()[0]] + "\n"
+
+		print "\n---\n"
 
 if __name__ == "__main__":
 
@@ -35,5 +51,6 @@ if __name__ == "__main__":
 	# sort list by time descending
 	xattrs.sort(key=lambda x:x['create_time'], reverse=True)
 
-	print(json.dumps(xattrs, indent=4))
+	# print(json.dumps(xattrs, indent=4))
+	genReport(xattrs, path)
 
