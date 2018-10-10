@@ -4,23 +4,27 @@ import time
 import json
 import xattr
 from pathlib import Path
-	
+
 def genReport(xattrs, path):
 
 	#TODO Make this write out to a file
-	
-	print "## Extended Attributes Report for " + str(path) + "\n"
+
+	r = open('report.md', 'w')
+
+	r.write("## Extended Attributes Report for " + str(path) + "\n\n")
 	for f in xattrs:
 
-		print "#### File Path:\n"
-		print f['file_path'] + "\n"
+		r.write("#### File Path:\n\n")
+		r.write(f['file_path'] + "\n\n")
 
-		print "#### Extended Attributes:"
+		r.write("#### Extended Attributes:\n\n")
 		for x in f['extended_attributes']:
-			print "- **" + x.keys()[0] + ":**\n"
-			print "\t" + x[x.keys()[0]] + "\n"
+			r.write("- **" + x.keys()[0] + ":**\n\n")
+			r.write("    " + x[x.keys()[0]] + "\n\n")
 
-		print "\n---\n"
+		r.write("\n\n---\n\n")
+
+	r.close()
 
 if __name__ == "__main__":
 
@@ -37,15 +41,15 @@ if __name__ == "__main__":
 	xattrs = []
 	for p in files:
 		file_xattrs = {}
-		
+
 		file_xattrs['file_path'] = str(p)
 		file_xattrs['create_time'] = time.ctime(os.path.getctime(str(p)))
 		file_xattrs['extended_attributes'] = []
-	
+
 		x = xattr.listxattr(str(p))
 		for attr_name in x:
 			file_xattrs['extended_attributes'].append({str(attr_name):xattr.getxattr(str(p), str(attr_name))})
-		
+
 		xattrs.append(file_xattrs)
 
 	# sort list by time descending
@@ -53,4 +57,3 @@ if __name__ == "__main__":
 
 	# print(json.dumps(xattrs, indent=4))
 	genReport(xattrs, path)
-
