@@ -3,8 +3,11 @@ import sys
 import time
 import json
 import xattr
+import pdfkit
 from pathlib import Path
+from markdown import markdown
 
+# Generate a markdown report of ADS data per file
 def genReport(xattrs, path):
 
 	#TODO Make this write out to a file
@@ -26,6 +29,21 @@ def genReport(xattrs, path):
 
 	r.close()
 
+# Convert report markdown file to a pdf
+def toPDF():
+
+	inputFile = 'report.md'
+	outputFile = 'report.pdf'
+
+	# inputFile = 'test.md'
+	# outputFile = 'test.pdf'
+
+	with open(inputFile, 'r') as f:
+		html = markdown(f.read(), output_format='html4')
+
+	pdfkit.from_string(html, outputFile)
+
+# Main
 if __name__ == "__main__":
 
 	if len(sys.argv) != 2:
@@ -57,3 +75,4 @@ if __name__ == "__main__":
 
 	# print(json.dumps(xattrs, indent=4))
 	genReport(xattrs, path)
+	toPDF()
