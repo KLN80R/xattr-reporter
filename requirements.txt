@@ -1,3 +1,5 @@
 pathlib==1.0.1
 xattr==0.9.6
-
+Markdown==3.0.1
+pdfkit==0.6.1
+wkhtmltopdf==0.2
