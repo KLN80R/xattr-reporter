@@ -14,7 +14,9 @@ This project produces a time-lined report of the alternate data stream/extended 
 
 ### Usage:
 
-`usage: xattr-reporter.py [-h] [-r] [-o OUTPUT] [-a] path`
+```
+usage: xattr-reporter.py [-h] [-r] [-o OUTPUT] [-a] path`
+```
 
 ```
 positional arguments:
