@@ -44,17 +44,10 @@ def toPDF():
 
 	pdfkit.from_string(html, outputFile)
 
-# Main
-if __name__ == "__main__":
 
-	parser = argparse.ArgumentParser()
-	parser.add_argument("path", help="path to directory to be scanned for extended attributes", type=str)
-	parser.add_argument("-r", help="recursively scan extended attributes in folder", action="store_true")
-	args = parser.parse_args()
-
-	path = Path(args.path)
-
-	# get extended attributes for each file in given directory
+# get extended attributes for each file in a given directory and return dict
+def get_xattrs(path):
+	
 	files = [p for p in path.iterdir() if p.is_file()]
 	xattrs = []
 	for p in files:
@@ -73,6 +66,20 @@ if __name__ == "__main__":
 	# sort list by time descending
 	xattrs.sort(key=lambda x:x['create_time'], reverse=True)
 
+	return xattrs
+
+
+# Main
+if __name__ == "__main__":
+
+	parser = argparse.ArgumentParser()
+	parser.add_argument("path", help="path to directory to be scanned for extended attributes", type=str)
+	parser.add_argument("-r", help="recursively scan extended attributes in folder", action="store_true")
+	args = parser.parse_args()
+
+	path = Path(args.path)
+	xattrs = get_xattrs(path)
+	
 	# print(json.dumps(xattrs, indent=4))
 	genReport(xattrs, path)
 	toPDF()
