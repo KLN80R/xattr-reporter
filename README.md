@@ -33,6 +33,9 @@ This project produces a time-lined report of the alternate data stream/extended 
 - wkhtmltopdf 0.2  
 `pip install wkhtmltopdf` or `apt-get install wkhtmltopdf`
 
+- hexdump 3.3
+`pip install hexdump`
+
 
 ### Extended Attributes macOS:
 

@@ -5,8 +5,15 @@ import json
 import xattr
 import pdfkit
 import argparse
+import hexdump
 from pathlib import Path
 from markdown import markdown
+
+reload(sys)
+sys.setdefaultencoding('utf8')
+
+def sanitize(s):
+	return "".join(i for i in s if ord(i)<128)
 
 # Generate a markdown report of ADS data per file
 def genReport(xattrs, path, file_name):
@@ -42,7 +49,7 @@ def toPDF(file_name):
 
 # get extended attributes for each file in a given directory and return dict
 def get_xattrs(path, asc=False):
-	
+
 	files = [p for p in path.iterdir() if p.is_file()]
 	xattrs = []
 	for p in files:
@@ -53,8 +60,22 @@ def get_xattrs(path, asc=False):
 		file_xattrs['extended_attributes'] = []
 
 		x = xattr.listxattr(str(p))
-		for attr_name in x:
-			file_xattrs['extended_attributes'].append({str(attr_name):xattr.getxattr(str(p), str(attr_name))})
+		for attr in x:
+
+			attr_name = str(attr)
+			attr_val = xattr.getxattr(str(p), attr_name)
+
+			if ("lastuseddate" in attr_name) or ("diskimages.fsck" in attr_name):# or ("metadata" in attr_name):
+				attr_val = hexdump.dump(attr_val)
+
+			if ("metadata" in attr_name):
+				attr_val = sanitize(attr_val)
+
+			file_xattrs['extended_attributes'].append({ attr_name : attr_val })
+
+			# for attr_name in x:
+				# file_xattrs['extended_attributes'].append({str(attr_name):xattr.getxattr(str(p), str(attr_name))})
+
 
 		xattrs.append(file_xattrs)
 
@@ -79,10 +100,9 @@ if __name__ == "__main__":
 
 	path = Path(args.path)
 	xattrs = get_xattrs(path, args.ascending)
-	
+
 	if args.output:
 		genReport(xattrs, path, args.output)
 		toPDF(args.output)
 	else:
 		print(json.dumps(xattrs, indent=4))
-
