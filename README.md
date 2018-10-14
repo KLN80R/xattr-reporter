@@ -4,7 +4,8 @@
 
 This project produces a time-lined report of the alternate data stream/extended attributes of files within a given directory, including their associated metadata.
 
-[Usage](#usage:)  
+[Usage](https://github.com/KLN80R/ADS-Reporter/blob/master/README.md#usage)
+ 
 [Requirements](#requirements:)  
 [Extended Attributes macOS](#extended-attributes-macos:)  
 [Extended Attributes Linux](#extended-attributes-linux:)  
