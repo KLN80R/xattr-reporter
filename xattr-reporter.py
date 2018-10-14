@@ -4,6 +4,7 @@ import time
 import json
 import xattr
 import pdfkit
+import argparse
 from pathlib import Path
 from markdown import markdown
 
@@ -46,13 +47,12 @@ def toPDF():
 # Main
 if __name__ == "__main__":
 
-	if len(sys.argv) != 2:
-		print "Usage: python proj.py <downloads folder>"
-		exit(1)
+	parser = argparse.ArgumentParser()
+	parser.add_argument("path", help="path to directory to be scanned for extended attributes", type=str)
+	parser.add_argument("-r", help="recursively scan extended attributes in folder", action="store_true")
+	args = parser.parse_args()
 
-	path = Path(sys.argv[1])
-
-	#TODO add flag for whether to sort descending or ascending
+	path = Path(args.path)
 
 	# get extended attributes for each file in given directory
 	files = [p for p in path.iterdir() if p.is_file()]
