@@ -4,12 +4,11 @@
 
 This project produces a time-lined report of the alternate data stream/extended attributes of files within a given directory, including their associated metadata.
 
-[Usage](https://github.com/KLN80R/ADS-Reporter/blob/master/README.md#usage)
- 
-[Requirements](#requirements:)  
-[Extended Attributes macOS](#extended-attributes-macos:)  
-[Extended Attributes Linux](#extended-attributes-linux:)  
-[Reference List](#reference-list:)  
+[Usage](https://github.com/KLN80R/ADS-Reporter/blob/master/README.md#usage)  
+[Requirements](https://github.com/KLN80R/ADS-Reporter/blob/master/README.md#requirements:)  
+[Extended Attributes macOS](https://github.com/KLN80R/ADS-Reporter/blob/master/README.md#extended-attributes-macos:)  
+[Extended Attributes Linux](https://github.com/KLN80R/ADS-Reporter/blob/master/README.md#extended-attributes-linux:)  
+[Reference List](https://github.com/KLN80R/ADS-Reporter/blob/master/README.md#reference-list:)  
 
 NB: Extended attributes are currently only available on Mac OS and Linux systems.
 
