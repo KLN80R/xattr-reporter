@@ -9,11 +9,11 @@ from pathlib import Path
 from markdown import markdown
 
 # Generate a markdown report of ADS data per file
-def genReport(xattrs, path):
+def genReport(xattrs, path, file_name):
 
 	#TODO Make this write out to a file
 
-	r = open('report.md', 'w')
+	r = open(file_name + '.md', 'w')
 
 	r.write("## Extended Attributes Report for " + str(path) + "\n\n")
 	for f in xattrs:
@@ -31,13 +31,10 @@ def genReport(xattrs, path):
 	r.close()
 
 # Convert report markdown file to a pdf
-def toPDF():
+def toPDF(file_name):
 
-	inputFile = 'report.md'
-	outputFile = 'report.pdf'
-
-	# inputFile = 'test.md'
-	# outputFile = 'test.pdf'
+	inputFile = file_name + '.md'
+	outputFile = file_name + '.pdf'
 
 	with open(inputFile, 'r') as f:
 		html = markdown(f.read(), output_format='html4')
@@ -74,12 +71,16 @@ if __name__ == "__main__":
 
 	parser = argparse.ArgumentParser()
 	parser.add_argument("path", help="path to directory to be scanned for extended attributes", type=str)
-	parser.add_argument("-r", help="recursively scan extended attributes in folder", action="store_true")
+	parser.add_argument("-r", "--recursive", action="store_true", help="recursively scan for extended attributes")
+	parser.add_argument("-o", "--output", type=str, help="name of output file")
 	args = parser.parse_args()
 
 	path = Path(args.path)
 	xattrs = get_xattrs(path)
 	
-	# print(json.dumps(xattrs, indent=4))
-	genReport(xattrs, path)
-	toPDF()
+	if args.output:
+		genReport(xattrs, path, args.output)
+		toPDF(args.output)
+	else:
+		print(json.dumps(xattrs, indent=4))
+
