@@ -10,7 +10,7 @@ This project produces a time-lined report of the alternate data stream/extended 
 [Extended Attributes Linux](https://github.com/KLN80R/ADS-Reporter/blob/master/README.md#extended-attributes-linux)  
 [Reference List](https://github.com/KLN80R/ADS-Reporter/blob/master/README.md#reference-list)  
 
-NB: Extended attributes are currently only available on Mac OS and Linux systems.
+**Note:** This tool is currently only compatible with macOS and Linux systems.
 
 ### Usage:
 
@@ -24,9 +24,19 @@ NB: Extended attributes are currently only available on Mac OS and Linux systems
 - pathlib 1.0.1  
 `pip install pathlib`  
 
+- Markdown 3.0.1  
+`pip install Markdown`
+
+- pdfkit 0.6.1  
+`pip install pdfkit`
+
+- wkhtmltopdf 0.2  
+`pip install wkhtmltopdf` or `apt-get install wkhtmltopdf`
+
+
 ### Extended Attributes macOS:
 
-Below is an outline of extended attributes typically found on macOS, with a particular focus on macOS High Sierra and Mojave. This is not an exhaustive list and only represents those extended attributes that were created by Apple and are frequently found within the file system. It is worth bearing in mind that any user is also able to create their own extended attributes to attach to files, and that these have not been included in our research.
+Below is an outline of extended attributes typically found on macOS, particularly High Sierra and Mojave. This is not an exhaustive list and only represents those extended attributes that were created by Apple and are frequently found within the file system. It is worth bearing in mind that any user is also able to create their own extended attributes to attach to files. Naturally, these have not been included in our research.
 
 - **com.apple.quarantine**    
 
@@ -37,6 +47,8 @@ Below is an outline of extended attributes typically found on macOS, with a part
 - **com.apple.FinderInfo**
 
     Used to store some minimal Finder information in binary format. This attribute allows backwards compatibility with pre macOS Mavericks HFS+ metadata. A typical use involves certain bits set within the attribute represent the current tags/label colour finder. It may also contain old file formats if the file type was changed.
+
+- **com.apple.metadata:kMDItemFinderComment
 
 - **com.apple.ResourceFork**  
 
@@ -58,7 +70,9 @@ Below is an outline of extended attributes typically found on macOS, with a part
 
 - **com.apple.metadata:kMDItemWhereFroms**
 
-    Contains information regarding the origin URL of the downloaded file. This data appears in the 'Get Info' Finder dialogue box. The URL is stored in a *binary property list* `(bplist)`.
+    Contains information regarding the origin URL of the downloaded file. This data appears in the 'Get Info' Finder dialogue box. The URL is stored in a *binary property list* `(bplist)`.  
+
+    In the case of an email attachment, the bplist contains details of the original email. including the subject line of the email, the contact name and email address from which it was sent as well as a hash of the message.
 
 - **com.apple.metadata:_kMDItemUserTags**  
 
@@ -88,15 +102,59 @@ Below is an outline of extended attributes typically found on macOS, with a part
 
     Designates whether the screenshot is a manual selection, full screen or a specific window.
 
+### Extended Attributes Linux:
+
+Below is an outline of extended attributes typically found within the 'user' namespace on Linux boxes. This is not an exhaustive list. It is worth bearing in mind that any user is also able to create their own extended attributes to attach to files. Naturally, these have not been included in our research.
+
+- **user.mime_type:**  
+
+    Explicitly sets the mime type of the file.
+
+- **user.charset:**  
+
+    The character encoding of a file.
+
+- **user.creator:**  
+
+    Which application created the file.
+
+- **user.xdg.comment:**  
+
+    User defined comment. Often visible by file managers.
+
+- **user.xdg.origin.url:**
+
+    The URL from which the file was downloaded.
+
+- **user.xdg.origin.email.subject:**
+
+    The subject line of an email from which the file attachment was downloaded.
+
+- **user.xdg.origin.email.from:**
+
+    The sender address of the email form which the file attachment was downloaded.
+
+- **user.xdg.origin.email.message-id:**
+
+    The message ID of the email from which the file attachment was downloaded.
+
+- **user.xdg.language:**
+
+    The content-language http header is written to this attribute when a file is downloaded.
+
+- **user.xdg.publisher:**
+
+    Name of the application which created the file.
 
 ### Reference List
 
-https://eclecticlight.co/2017/08/14/show-me-your-metadata-extended-attributes-in-macos-sierra/
-https://eclecticlight.co/2018/02/08/xattr-com-apple-diskimages-recentcksum-disk-image-checksum/
-https://eclecticlight.co/2018/02/08/xattr-com-apple-diskimages-fsck-record-of-disk-image-integrity-check/  
-https://eclecticlight.co/2017/12/21/xattr-com-apple-metadatakmditemwherefroms-origin-of-downloaded-file/
-http://rixstep.com/2/20180729,00.shtml
-http://krypted.com/tag/com-apple-finderinfo/
-https://arstechnica.com/gadgets/2013/10/os-x-10-9/9/
-https://www.pressreader.com/australia/mac-life/20180529/283034055211985
-https://blog.padil.la/2016/06/30/using-file-attributes-to-fill-volumes-and-bypass-os-x-server-limits/
+- https://eclecticlight.co/2017/08/14/show-me-your-metadata-extended-attributes-in-macos-sierra/
+- https://eclecticlight.co/2018/02/08/xattr-com-apple-diskimages-recentcksum-disk-image-checksum/
+- https://eclecticlight.co/2018/02/08/xattr-com-apple-diskimages-fsck-record-of-disk-image-integrity-check/  
+- https://eclecticlight.co/2017/12/21/xattr-com-apple-metadatakmditemwherefroms-origin-of-downloaded-file/
+- http://rixstep.com/2/20180729,00.shtml
+- http://krypted.com/tag/com-apple-finderinfo/
+- https://arstechnica.com/gadgets/2013/10/os-x-10-9/9/
+- https://www.pressreader.com/australia/mac-life/20180529/283034055211985
+- https://blog.padil.la/2016/06/30/using-file-attributes-to-fill-volumes-and-bypass-os-x-server-limits/
+- https://www.freedesktop.org/wiki/CommonExtendedAttributes/
