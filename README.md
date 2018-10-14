@@ -1,4 +1,4 @@
-# ADS-Reporter
+# xattr-reporter
 
 ### Overview:
 
@@ -14,7 +14,20 @@ This project produces a time-lined report of the alternate data stream/extended 
 
 ### Usage:
 
-`python proj.py [directory-path]`
+`usage: xattr-reporter.py [-h] [-r] [-o OUTPUT] [-a] path`
+
+```
+positional arguments:
+  path                  path to directory to be scanned for extended
+                        attributes
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -r, --recursive       recursively scan for extended attributes
+  -o OUTPUT, --output OUTPUT
+                        name of file to output to
+  -a, --ascending       sort by time ascending (default is descending)
+ ```
 
 ### Requirements:
 
