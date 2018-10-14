@@ -4,8 +4,8 @@ import time
 import json
 import xattr
 import pdfkit
-import argparse
 import hexdump
+import argparse
 from pathlib import Path
 from markdown import markdown
 
@@ -15,7 +15,7 @@ sys.setdefaultencoding('utf8')
 def sanitize(s):
 	return "".join(i for i in s if ord(i)<128)
 
-# Generate a markdown report of ADS data per file
+# Generate a markdown report of extended attribute data per file
 def genReport(xattrs, path, file_name):
 
 	r = open(file_name + '.md', 'w')
@@ -47,14 +47,14 @@ def toPDF(file_name):
 	pdfkit.from_string(html, outputFile)
 
 
-# get extended attributes for each file in a given directory and return dict
+# Get extended attributes for each file in a given directory and return dict
 def get_xattrs(path, asc=False):
 
 	files = [p for p in path.iterdir() if p.is_file()]
 	xattrs = []
 	for p in files:
-		file_xattrs = {}
 
+		file_xattrs = {}
 		file_xattrs['file_path'] = str(p)
 		file_xattrs['create_time'] = time.ctime(os.path.getctime(str(p)))
 		file_xattrs['extended_attributes'] = []
@@ -65,7 +65,7 @@ def get_xattrs(path, asc=False):
 			attr_name = str(attr)
 			attr_val = xattr.getxattr(str(p), attr_name)
 
-			if ("lastuseddate" in attr_name) or ("diskimages.fsck" in attr_name):# or ("metadata" in attr_name):
+			if ("lastuseddate" in attr_name) or ("diskimages.fsck" in attr_name):
 				attr_val = hexdump.dump(attr_val)
 
 			if ("metadata" in attr_name):
@@ -73,17 +73,13 @@ def get_xattrs(path, asc=False):
 
 			file_xattrs['extended_attributes'].append({ attr_name : attr_val })
 
-			# for attr_name in x:
-				# file_xattrs['extended_attributes'].append({str(attr_name):xattr.getxattr(str(p), str(attr_name))})
-
-
 		xattrs.append(file_xattrs)
 
 	if asc:
-		# sort by create time ascending
+		# Sort by create time ascending
 		xattrs.sort(key=lambda x:x['create_time'])
 	else:
-		# sort by create time descending
+		# Sort by create time descending
 		xattrs.sort(key=lambda x:x['create_time'], reverse=True)
 
 	return xattrs
