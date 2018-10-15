@@ -62,6 +62,15 @@ def handleAttr(attr_name, attr_val):
 		ret = time.strftime('%Y-%m-%d %H:%M:%S', ret)
 		return ret
 
+	elif ("com.apple.quarantine" in attr_name):
+		t = attr_val[5:13]
+		t = float.fromhex(t)
+		t = time.localtime(t)
+
+		ret = attr_val[:5] + time.strftime("%Y-%m-%d %H:%M:%S", t) + attr_val[13:]
+		return ret
+
+
 	elif ("com.apple.diskimages.fsck" in attr_name):
 		ret = hexdump.dump(attr_val)
 
