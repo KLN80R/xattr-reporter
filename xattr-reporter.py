@@ -62,16 +62,16 @@ def handleAttr(attr_name, attr_val):
 		ret = time.strftime('%Y-%m-%d %H:%M:%S', ret)
 		return ret
 
-	elif ("com.apple.diskimages.fsck" in attr_val):
+	elif ("com.apple.diskimages.fsck" in attr_name):
 		ret = hexdump.dump(attr_val)
 
-	elif ("com.apple.metadata:com_apple_mail_dateReceived" in attr_val):
+	elif ("com.apple.metadata:com_apple_mail_dateReceived" in attr_name):
 		ret = hexdump.dump(attr_val)
 
-	elif ("com.apple.metadata:com_apple_mail_dateSent" in attr_val):
+	elif ("com.apple.metadata:com_apple_mail_dateSent" in attr_name):
 		ret = hexdump.dump(attr_val)
 
-	elif ("com.apple.metadata:com_apple_mail_isRemoteAttachment" in attr_val):
+	elif ("com.apple.metadata:com_apple_mail_isRemoteAttachment" in attr_name):
 		ret = hexdump.dump(attr_val)
 
 	elif ("metadata" in attr_name):
