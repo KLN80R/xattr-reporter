@@ -4,6 +4,7 @@ import time
 import json
 import xattr
 import pdfkit
+import struct
 import hexdump
 import argparse
 from pathlib import Path
@@ -46,10 +47,20 @@ def toPDF(file_name):
 
 	pdfkit.from_string(html, outputFile)
 
+# Output attributes according to their data/display type
 def handleAttr(attr_name, attr_val):
 
 	if ("com.apple.lastuseddate#PS" in attr_name):
+
+		# Convert hexdump to timestamp
 		ret = hexdump.dump(attr_val)
+		ret = ret.replace(" ", "")
+		ret = ret[:8]
+		ret = "".join(reversed([ret[i:i+2] for i in range(0, len(ret), 2)]))
+		ret = float.fromhex(ret)
+		ret = time.localtime(ret)
+		ret = time.strftime('%Y-%m-%d %H:%M:%S', ret)
+		return ret
 
 	elif ("com.apple.diskimages.fsck" in attr_val):
 		ret = hexdump.dump(attr_val)
