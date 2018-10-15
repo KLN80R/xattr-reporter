@@ -48,13 +48,14 @@ def toPDF(file_name):
 
 
 # Get extended attributes for each file in a given directory and return dict
-def get_xattrs(path, asc=False):
+def get_xattrs(path, asc=False, recurse=False):
 
 	files = [p for p in path.iterdir() if p.is_file()]
-        dirs = [sd for sd in path.iterdir() if sd.is_dir()]
-        for sd in dirs:
-            files += [p for p in sd.iterdir() if p.is_file()]
-            dirs += [new_dir for new_dir in sd.iterdir() if new_dir.is_dir()]
+        if recurse==True:
+                dirs = [sd for sd in path.iterdir() if sd.is_dir()]
+                for sd in dirs:
+                    files += [p for p in sd.iterdir() if p.is_file()]
+                    dirs += [new_dir for new_dir in sd.iterdir() if new_dir.is_dir()]
 
         xattrs = []
         for p in files:
@@ -99,7 +100,7 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 
 	path = Path(args.path)
-	xattrs = get_xattrs(path, args.ascending)
+	xattrs = get_xattrs(path, args.ascending, args.recursive)
 
 	if args.output:
 		genReport(xattrs, path, args.output)
