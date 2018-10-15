@@ -50,30 +50,32 @@ def toPDF(file_name):
 # Get extended attributes for each file in a given directory and return dict
 def get_xattrs(path, asc=False):
 
-	files = [p for p in path.iterdir() if p.is_file()]
+        
+	#files = [p for p in path.iterdir() if p.is_file()]
 	xattrs = []
-	for p in files:
+        for dirpath, dirnames, files in os.walk(path):        
+                for p in files:
 
-		file_xattrs = {}
-		file_xattrs['file_path'] = str(p)
-		file_xattrs['create_time'] = time.ctime(os.path.getctime(str(p)))
-		file_xattrs['extended_attributes'] = []
+                        file_xattrs = {}
+                        file_xattrs['file_path'] = str(p)
+                        file_xattrs['create_time'] = time.ctime(os.path.getctime(str(p)))
+                        file_xattrs['extended_attributes'] = []
 
-		x = xattr.listxattr(str(p))
-		for attr in x:
+                        x = xattr.listxattr(str(p))
+                        for attr in x:
 
-			attr_name = str(attr)
-			attr_val = xattr.getxattr(str(p), attr_name)
+                                attr_name = str(attr)
+                                attr_val = xattr.getxattr(str(p), attr_name)
 
-			if ("lastuseddate" in attr_name) or ("diskimages.fsck" in attr_name):
-				attr_val = hexdump.dump(attr_val)
+                                if ("lastuseddate" in attr_name) or ("diskimages.fsck" in attr_name):
+                                        attr_val = hexdump.dump(attr_val)
 
-			if ("metadata" in attr_name):
-				attr_val = sanitize(attr_val)
+                                if ("metadata" in attr_name):
+                                        attr_val = sanitize(attr_val)
 
-			file_xattrs['extended_attributes'].append({ attr_name : attr_val })
+                                file_xattrs['extended_attributes'].append({ attr_name : attr_val })
 
-		xattrs.append(file_xattrs)
+                        xattrs.append(file_xattrs)
 
 	if asc:
 		# Sort by create time ascending
