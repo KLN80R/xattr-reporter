@@ -51,29 +51,34 @@ def toPDF(file_name):
 def get_xattrs(path, asc=False):
 
 	files = [p for p in path.iterdir() if p.is_file()]
-	xattrs = []
-	for p in files:
+        dirs = [sd for sd in path.iterdir() if sd.is_dir()]
+        for sd in dirs:
+            files += [p for p in sd.iterdir() if p.is_file()]
+            dirs += [new_dir for new_dir in sd.iterdir() if new_dir.is_dir()]
 
-		file_xattrs = {}
-		file_xattrs['file_path'] = str(p)
-		file_xattrs['create_time'] = time.ctime(os.path.getctime(str(p)))
-		file_xattrs['extended_attributes'] = []
+        xattrs = []
+        for p in files:
+                print(p)
+                file_xattrs = {}
+                file_xattrs['file_path'] = str(p)
+                file_xattrs['create_time'] = time.ctime(os.path.getctime(str(p)))
+                file_xattrs['extended_attributes'] = []
 
-		x = xattr.listxattr(str(p))
-		for attr in x:
+                x = xattr.listxattr(str(p))
+                for attr in x:
 
-			attr_name = str(attr)
-			attr_val = xattr.getxattr(str(p), attr_name)
+                        attr_name = str(attr)
+                        attr_val = xattr.getxattr(str(p), attr_name)
 
-			if ("lastuseddate" in attr_name) or ("diskimages.fsck" in attr_name):
-				attr_val = hexdump.dump(attr_val)
+                        if ("lastuseddate" in attr_name) or ("diskimages.fsck" in attr_name):
+                                attr_val = hexdump.dump(attr_val)
 
-			if ("metadata" in attr_name):
-				attr_val = sanitize(attr_val)
+                        if ("metadata" in attr_name):
+                                attr_val = sanitize(attr_val)
 
-			file_xattrs['extended_attributes'].append({ attr_name : attr_val })
+                        file_xattrs['extended_attributes'].append({ attr_name : attr_val })
 
-		xattrs.append(file_xattrs)
+                xattrs.append(file_xattrs)
 
 	if asc:
 		# Sort by create time ascending
