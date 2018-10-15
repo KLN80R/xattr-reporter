@@ -46,39 +46,57 @@ def toPDF(file_name):
 
 	pdfkit.from_string(html, outputFile)
 
+def handleAttr(attr_name, attr_val):
+
+	if ("com.apple.lastuseddate#PS" in attr_name):
+		ret = hexdump.dump(attr_val)
+
+	elif ("com.apple.diskimages.fsck" in attr_val):
+		ret = hexdump.dump(attr_val)
+
+	elif ("com.apple.metadata:com_apple_mail_dateReceived" in attr_val):
+		ret = hexdump.dump(attr_val)
+
+	elif ("com.apple.metadata:com_apple_mail_dateSent" in attr_val):
+		ret = hexdump.dump(attr_val)
+
+	elif ("com.apple.metadata:com_apple_mail_isRemoteAttachment" in attr_val):
+		ret = hexdump.dump(attr_val)
+
+	elif ("metadata" in attr_name):
+		ret = sanitize(attr_val)
+
+	else:
+		ret = sanitize(attr_val)
+
+	return ret
 
 # Get extended attributes for each file in a given directory and return dict
 def get_xattrs(path, asc=False, recurse=False):
 
 	files = [p for p in path.iterdir() if p.is_file()]
-        if recurse==True:
-                dirs = [sd for sd in path.iterdir() if sd.is_dir()]
-                for sd in dirs:
-                    files += [p for p in sd.iterdir() if p.is_file()]
-                    dirs += [new_dir for new_dir in sd.iterdir() if new_dir.is_dir()]
+	dirs = []
+	if recurse:
+		dirs = [sd for sd in path.iterdir() if sd.is_dir()]
+		for sd in dirs:
+			files += [p for p in sd.iterdir() if p.is_file()]
+			dirs += [new_dir for new_dir in sd.iterdir() if new_dir.is_dir()]
 
-        xattrs = []
-        for p in files:
-                file_xattrs = {}
-                file_xattrs['file_path'] = str(p)
-                file_xattrs['create_time'] = time.ctime(os.path.getctime(str(p)))
-                file_xattrs['extended_attributes'] = []
+	xattrs = []
+	for p in files:
+		file_xattrs = {}
+		file_xattrs['file_path'] = str(p)
+		file_xattrs['create_time'] = time.ctime(os.path.getctime(str(p)))
+		file_xattrs['extended_attributes'] = []
 
-                x = xattr.listxattr(str(p))
-                for attr in x:
+		x = xattr.listxattr(str(p))
+		for attr in x:
+			attr_name = str(attr)
+			attr_val = xattr.getxattr(str(p), attr_name)
+			attr_val = handleAttr(attr_name, attr_val)
+			file_xattrs['extended_attributes'].append({ attr_name : attr_val })
 
-                        attr_name = str(attr)
-                        attr_val = xattr.getxattr(str(p), attr_name)
-
-                        if ("lastuseddate" in attr_name) or ("diskimages.fsck" in attr_name):
-                                attr_val = hexdump.dump(attr_val)
-
-                        if ("metadata" in attr_name):
-                                attr_val = sanitize(attr_val)
-
-                        file_xattrs['extended_attributes'].append({ attr_name : attr_val })
-
-                xattrs.append(file_xattrs)
+		xattrs.append(file_xattrs)
 
 	if asc:
 		# Sort by create time ascending
