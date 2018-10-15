@@ -58,7 +58,6 @@ def get_xattrs(path, asc=False):
 
         xattrs = []
         for p in files:
-                print(p)
                 file_xattrs = {}
                 file_xattrs['file_path'] = str(p)
                 file_xattrs['create_time'] = time.ctime(os.path.getctime(str(p)))
