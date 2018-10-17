@@ -2,10 +2,16 @@
     [string]$path = ".\",
     [string]$output,
     [switch]$recurse = $false,
-    [switch]$dl
+    [switch]$dl,
+    [switch]$h
 )
 
-
+if ($h) {
+    Write-Host "Usage: .\ads-reporter.ps1 <path_to_directory> -output <output_file> -recurse -dl"
+    Write-Host "          -recurse will recursively check through all subdirectories for ads"
+    Write-Host "          -dl will only search for ADS where 'ZoneId=3' to reconstruct an internet download history within the directory"
+    exit
+}
 # set file name if output filename given
 if ($output) { $json_file = '.\'+$output+'.json' }
 
