@@ -8,7 +8,8 @@ foreach ($f in $files)
     foreach ($item in $alternateData)
     {
         if ($item.Stream.Contains('DATA') -eq $true){continue}
-        Write-Host "Path: " $item.PSPath -ForegroundColor Green 
+        Write-Host "Path: " $item.PSPath -ForegroundColor Green
+        Write-Host "Creation Date: " $f.CreationTimeUtc 
         Write-Host "Parent Path: " $item.PSParentPath -ForegroundColor Yellow
         Write-Host "PSChildName: " $item.PSChildName -ForegroundColor Yellow 
         Write-Host "PSProvider: " $item.PSProvider -ForegroundColor Yellow
