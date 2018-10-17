@@ -47,7 +47,13 @@ All requirements can be installed with the command
 
 This tool produces a time-lined report of the alternate data streams of files within a given directory, including their associated metadata.
 
-**Note:** This tool is currently only compatible with Windows systems. Please refer to [xattr-reporter](https://github.com/KLN80R/xattr-reporter/blob/master/README.md#xattr-reporter) for an equivalent tool for Windows systems.
+**Note:** This tool is currently only compatible with Windows systems. Please refer to [xattr-reporter](https://github.com/KLN80R/xattr-reporter/blob/master/README.md#xattr-reporter) for an equivalent tool for macOS and Linux systems.
 
 ### Usage:
-The default behaviour non-recursively scans the directory for any alternate data streams and their values, sorts by most recent (descending) create time and outputs the results in a valid JSON format.
+
+'.\ads-reporter.ps1 \<path\>'
+
+The default behaviour non-recursively scans the current directory for any alternate data streams and their values, sorts by most recent (descending) create time and outputs the results in a valid JSON format.
+
+### Requirements:
+This tool requires Powershell to be installed on the Windows system.
