@@ -16,14 +16,14 @@ if ($h) {
 if ($output) { $json_file = '.\'+$output+'.json' }
 
 # get list of files (uses recursion if option set)
-if ($recurse) { $files = Get-ChildItem -Path $path -Attributes !Directory -Force -Recurse }
-else { $files = Get-ChildItem -Path $path -Attributes !Directory -Force }
+if ($recurse) { $files = Get-ChildItem -Path $path -Attributes !Directory -Force -Recurse | Sort-Object -Property CreationTimeUtc}
+else { $files = Get-ChildItem -Path $path -Attributes !Directory -Force | Sort-Object -Property CreationTimeUtc}
 
 
 ### this function takes a list of files and returns a hash of all ads items from that list
 function getAllADS ($files)
 {
-    $adsMap = @{}
+    $adsMap = [ordered]@{}
 
     foreach ($f in $files) {
         # initalise hashmap
@@ -43,7 +43,7 @@ function getAllADS ($files)
 ### this function returns a hashmap of all ads items where ZoneId=3
 Function getDLHistory($adsMap)
 {
-    $dlMap = @{}
+    $dlMap = [ordered]@{}
     foreach($file in $adsMap.Keys) {
         $dlMap[$file] = @()
         foreach($ads in $adsMap[$file]) {
@@ -78,7 +78,7 @@ function writeADSToScreen($adsMap)
 # takes hash of ads and returns json report style hash
 function getJsonOutput($adsMap)
 {
-    $jsonOutput = @{}
+    $jsonOutput = [ordered]@{}
     foreach($key in $adsMap.Keys)
     {
         foreach($item in $adsMap[$key]) {
