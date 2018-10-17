@@ -51,7 +51,7 @@ This tool produces a time-lined report of the alternate data streams of files wi
 
 ### Usage:
 
-`.\ads-reporter.ps1 \<path\>`
+`.\ads-reporter.ps1 <path>`
 
 The default behaviour non-recursively scans the current directory for any alternate data streams and their values, sorts by most recent (descending) create time and outputs the results in a valid JSON format.
 
