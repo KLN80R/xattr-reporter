@@ -16,8 +16,8 @@ if ($h) {
 if ($output) { $json_file = '.\'+$output+'.json' }
 
 # get list of files (uses recursion if option set)
-if ($recurse) { $files = Get-ChildItem -Path $path -Attributes !Directory -Force -Recurse | Sort-Object -Property CreationTimeUtc}
-else { $files = Get-ChildItem -Path $path -Attributes !Directory -Force | Sort-Object -Property CreationTimeUtc}
+if ($recurse) { $files = Get-ChildItem -LiteralPath $path -Attributes !Directory -Force -Recurse | Sort-Object -Property CreationTimeUtc}
+else { $files = Get-ChildItem -LiteralPath $path -Attributes !Directory -Force | Sort-Object -Property CreationTimeUtc}
 
 
 ### this function takes a list of files and returns a hash of all ads items from that list
@@ -30,7 +30,7 @@ function getAllADS ($files)
         $adsMap[$f]=@()
     
         # get all data streams -- somehow this actually gets all ads per file
-        $alternateData = Get-Item -Path $f.FullName | Get-Item -Stream *
+        $alternateData = Get-Item -Path $f.FullName -Force | Get-Item -Stream *  -Force
         
         foreach ($item in $alternateData) {
             if ($item.Stream.Contains('DATA') -eq $true){continue}
