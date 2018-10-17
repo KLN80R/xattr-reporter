@@ -38,12 +38,12 @@ function getAllADS ($files)
 Function getDLHistory($adsMap)
 {
     $dlMap = @{}
-    foreach($key in $adsMap.Keys) {
-        foreach($item in $adsMap[$key].Values) {
-            $content = Get-Content -Path $key.FullName -Stream $item.Stream
-            
+    foreach($file in $adsMap.Keys) {
+        $dlMap[$file] = @()
+        foreach($ads in $adsMap[$file]) {
+            $content = Get-Content -Path $file.FullName -Stream $ads.Stream
             if($content.Contains("ZoneId=3")) {
-                $dlMap[$key.FullName + $item.Stream.ToString()] = $item
+                $dlMap[$file] += $ads
             }
         }
     }
@@ -51,17 +51,22 @@ Function getDLHistory($adsMap)
 }
 
 # dumps ads information to screen
-function writeADSToScreen($item, $key)
+function writeADSToScreen($adsMap)
 {
-    Write-Host "Path: " $item.PSPath -ForegroundColor Green
-    Write-Host "Creation Date: " $key.CreationTimeUtc  -ForegroundColor Green
-    Write-Host "PSChildName: " $item.PSChildName -ForegroundColor Red
-    Write-Host "Parent Path: " $item.PSParentPath -ForegroundColor Yellow
-    Write-Host "Filename: " $item.FileName -ForegroundColor Yellow
-    Write-Host "Length: " $item.Length -ForegroundColor Yellow
-    Write-Host "Content:" -ForegroundColor Cyan
-    Get-Content -Path $key.FullName -Stream $item.Stream
-    Write-Host "`n"
+    foreach($key in $adsMap.Keys)
+    {
+        foreach($item in $adsMap[$key]) {
+        Write-Host "Path: " $item.PSPath -ForegroundColor Green
+        Write-Host "Creation Date: " $key.CreationTimeUtc  -ForegroundColor Green
+        Write-Host "PSChildName: " $item.PSChildName -ForegroundColor Red
+        Write-Host "Parent Path: " $item.PSParentPath -ForegroundColor Yellow
+        Write-Host "Filename: " $item.FileName -ForegroundColor Yellow
+        Write-Host "Length: " $item.Length -ForegroundColor Yellow
+        Write-Host "Content:" -ForegroundColor Cyan
+        Get-Content -Path $key.FullName -Stream $item.Stream
+        Write-Host "`n"
+        }
+    }
 }
 
 # takes hash of ads and returns json report style hash
@@ -93,6 +98,11 @@ if ($output) {
         $jsonOutput = getJsonOutput($adsMap)
         Write-Output $jsonOutput | ConvertTo-Json | Out-File $json_file -Encoding utf8
     }
+} else {
+    if ($dl) {
+        $dlmap = getDLHistory($adsMap);
+        writeADSToScreen($dlmap)
+    } else {
+        writeADSToScreen($adsMap)
+    }
 }
-
-#elseif ($output) { Write-Output $jsonOutput | ConvertTo-Json | Out-File $json_file -Encoding utf8}
