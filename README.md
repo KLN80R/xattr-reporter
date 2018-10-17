@@ -9,7 +9,7 @@ This project produces a time-lined report of the extended attributes of files wi
 ### Usage:
 
 ```
-usage: xattr-reporter.py [-h] [-r] [-o OUTPUT] [-a] path`
+usage: xattr-reporter.py [-h] [-r] [-o OUTPUT] [-a] path
 ```
 
 ```
@@ -24,6 +24,8 @@ optional arguments:
                         name of file to output to
   -a, --ascending       sort by time ascending (default is descending)
  ```
+
+The default behaviour non-recursively scans the directory for any extended attributes and their values, sorts by most recent (descending) create time and outputs the results in a valid JSON format.
 
 ### Requirements:
 This tool uses Python 2.7 and requires the following libraries:
@@ -47,4 +49,5 @@ This tool produces a time-lined report of the alternate data streams of files wi
 
 **Note:** This tool is currently only compatible with Windows systems. Please refer to [xattr-reporter](https://github.com/KLN80R/xattr-reporter/blob/master/README.md#xattr-reporter) for an equivalent tool for Windows systems.
 
-
+### Usage:
+The default behaviour non-recursively scans the directory for any alternate data streams and their values, sorts by most recent (descending) create time and outputs the results in a valid JSON format.
