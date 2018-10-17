@@ -1,7 +1,11 @@
-﻿$getPath = Read-Host "What is the path you would like to search?`n"
+﻿param (
+    [string]$path = ".\",
+    [switch]$recurse = $false
+)
+#$getPath = Read-Host "What is the path you would like to search?`n"
 $adsMap = @{}
-
-$files = Get-ChildItem -Path $getPath -Attributes !Directory -Force -Recurse
+if ($recurse) { $files = Get-ChildItem -Path $path -Attributes !Directory -Force -Recurse }
+else { $files = Get-ChildItem -Path $path -Attributes !Directory -Force }
 foreach ($f in $files)
 {
     # initalise hashmap
