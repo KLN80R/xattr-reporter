@@ -52,4 +52,4 @@ foreach($key in $adsMap.Keys)
 }
 
 #foreach( $item in $jsonOutput.GetEnumerator() | Sort -Property "Creation Date UTC"
-if ($output) { Write-Output $jsonOutput | ConvertTo-Json | File $json_file}
+if ($output) { Write-Output $jsonOutput | ConvertTo-Json | Out-File $json_file}
